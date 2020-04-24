@@ -1,5 +1,7 @@
 package academy.learnprogramming.placefinder
 
+import academy.learnprogramming.placefinder.GoogleMap.MapsActivity
+import academy.learnprogramming.placefinder.PlacesDetail.PlaceDetailActivity
 import academy.learnprogramming.placefinder.db.PlacesEntity
 import android.content.Intent
 import android.view.LayoutInflater
@@ -42,13 +44,26 @@ class MainAdapter(
 
     }
 
+    private fun goToMap(view: View, name: String, lon: Double, lat: Double) {
+
+        val PLACE_NAME_KEY = "PLACE_NAME"
+        val PLACE_LON_KEY = "PLACE_LON"
+        val PLACE_LAT_KEY = "PLACE_LAT"
+
+        val intent = Intent(view.context, MapsActivity::class.java)
+        intent.putExtra(PLACE_NAME_KEY, name)
+        intent.putExtra(PLACE_LON_KEY, lon)
+        intent.putExtra(PLACE_LAT_KEY, lat)
+        view.context.startActivity(intent)
+    }
+
     override fun getFilter(): Filter {
         return placeFilter
     }
 
     private val placeFilter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults? {
-            val aFilteredList: MutableList<PlacesEntity> = mutableListOf()
+            val aFilteredList: MutableList<PlacesEntity> =
 
             if (constraint == null || constraint.isEmpty()) {
                 placeListFull
@@ -91,7 +106,7 @@ class MainAdapter(
                 val intent = Intent(view.context, PlaceDetailActivity::class.java)
 
                 intent.putExtra(PLACE_TITLE_KEY, placesEntity?.placeName)
-                intent.putExtra(PLACE_ID_KEY, placesEntity?.placeName)
+                intent.putExtra(PLACE_ID_KEY, placesEntity?.placesId)
 
                 view.context.startActivity(intent)
             }
