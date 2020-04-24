@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.place_detail_row.view.*
 import okhttp3.*
-import okhttp3.HttpUrl.get
+
 import java.io.IOException
 
 class PlaceDetailActivity : AppCompatActivity() {
@@ -26,17 +26,17 @@ class PlaceDetailActivity : AppCompatActivity() {
         recyclerView_main.layoutManager = LinearLayoutManager(this)
 
         // we'll change the nav bar title..
-        val navBarTitle = intent.getStringExtra(CustomViewHolder.PLACE_TITLE_KEY)
+        val navBarTitle = intent.getStringExtra(MainAdapter.CustomViewHolder.PLACE_TITLE_KEY)
         supportActionBar?.title = navBarTitle
 
-        val placeId = intent.getIntExtra(CustomViewHolder.PLACE_ID_KEY, -1)
+        val placeId = intent.getIntExtra(MainAdapter.CustomViewHolder.PLACE_ID_KEY, -1)
 
         fetchJSON()
     }
 
     private fun fetchJSON() {
 
-        val placeId = intent.getLongExtra(CustomViewHolder.PLACE_ID_KEY, -1)
+        val placeId = intent.getLongExtra(MainAdapter.CustomViewHolder.PLACE_ID_KEY, -1)
         val placeDetailUrl = "https://www.noforeignland.com/home/api/v1/place?id=" + placeId
 
         val client = OkHttpClient()
@@ -44,7 +44,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 println("onResponse for individual place called")
-                val body = response.body()?.string()
+                val body = response.body?.string()
 
                 val gson = GsonBuilder().create()
                 val fromPlaceId = gson.fromJson(body, FromPlaceId::class.java)

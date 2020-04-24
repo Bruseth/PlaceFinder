@@ -1,5 +1,6 @@
 package academy.learnprogramming.placefinder
 
+import academy.learnprogramming.placefinder.db.PlacesEntity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,21 +9,20 @@ import android.widget.Filterable
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.name_row.view.*
-import java.io.FilterReader
 
 
 class MainAdapter(
-    var places: MutableList<Feature> = mutableListOf()
+    private var placeListFull: MutableList<PlacesEntity> = mutableListOf()
     ) : RecyclerView.Adapter<MainAdapter.CustomViewHolder>(), Filterable {
 
-    private var featureListToShow: MutableList<Feature> = mutableListOf()
+    private var featureListToShow: MutableList<PlacesEntity> = mutableListOf()
 
     init {
-        featureListToShow = Places
+        featureListToShow = placeListFull
     }
 
     override fun getItemCount(): Int {
-        return places.features.size()
+        return featureListToShow.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -34,10 +34,11 @@ class MainAdapter(
 
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val feature = places.features.get(position)
+        val feature = featureListToShow[position]
 
-        holder.view.textView_place_name.text = feature.properties.name
-        holder?.feature = feature
+        holder.view.textView_place_name.text = feature.placeName
+
+        holder.placesEntity = feature
 
     }
 
@@ -47,37 +48,37 @@ class MainAdapter(
 
     private val placeFilter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults? {
-            val aFilteredList: MutableList<Feature> = mutableListOf()
+            val aFilteredList: MutableList<PlacesEntity> = mutableListOf()
 
             if (constraint == null || constraint.isEmpty()) {
-                places
+                placeListFull
 
             } else {
-                places.filter {
-                    it.places.name.constrain(
+                placeListFull.filter {
+                    it.placeName.contains(
                         constraint.toString(),
                         ignoreCase = true
                     )
-                } as MutableList<Feature>
+                } as MutableList<PlacesEntity>
 
             }
 
-            val result = places.features()
+            val result = FilterResults()
             result.values = aFilteredList
             return result
         }
 
-        @Suppress("UNCHEKED_CAST")
+        @Suppress("UNCHECKED_CAST")
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             results?.values.let {
-                featureListToShow = it as MutableList<Feature>
+                featureListToShow = it as MutableList<PlacesEntity>
             }
             notifyDataSetChanged()
         }
     }
 
 
-    class CustomViewHolder(val view: View, var feature: Feature? = null) :
+    class CustomViewHolder(val view: View, var placesEntity: PlacesEntity? = null) :
         RecyclerView.ViewHolder(view) {
 
         companion object {
@@ -89,8 +90,8 @@ class MainAdapter(
             view.setOnClickListener {
                 val intent = Intent(view.context, PlaceDetailActivity::class.java)
 
-                intent.putExtra(PLACE_TITLE_KEY, feature?.properties?.name)
-                intent.putExtra(PLACE_ID_KEY, feature?.properties?.id)
+                intent.putExtra(PLACE_TITLE_KEY, placesEntity?.placeName)
+                intent.putExtra(PLACE_ID_KEY, placesEntity?.placeName)
 
                 view.context.startActivity(intent)
             }
