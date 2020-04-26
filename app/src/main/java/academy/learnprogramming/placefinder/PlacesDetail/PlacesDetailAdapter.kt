@@ -52,10 +52,19 @@ class PlaceDetailAdapter(val fromPlaceId: FromPlaceId) :
         } else {
             Picasso.get().load(bannerUrl).into(bannerImage)
         }
+        val placeName = fromPlaceId.place.name
+        val placeLon = fromPlaceId.place.lon
+        val placeLat = fromPlaceId.place.lat
+
+        holder.customView.button_google_map.setOnClickListener {
+            println("Hello From navigation Link")
+            mapScreen(holder.customView, placeName, placeLon, placeLat)
+        }
+
         holder.fromPlaceId = fromPlaceId
     }
 
-    private fun goToMap(view: View, name: String, lon: Double, lat: Double) {
+    private fun mapScreen(view: View, name: String, lon: Double, lat: Double) {
 
         val PLACE_NAME_KEY = "PLACE_NAME"
         val PLACE_LON_KEY = "PLACE_LON"

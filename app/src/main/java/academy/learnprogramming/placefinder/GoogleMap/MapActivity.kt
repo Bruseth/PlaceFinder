@@ -1,9 +1,7 @@
 package academy.learnprogramming.placefinder.GoogleMap
 
-import academy.learnprogramming.placefinder.MainAdapter.CustomViewHolder.Companion.PLACE_ID_KEY
-import academy.learnprogramming.placefinder.PlacesDetail.PlaceDetailActivity
-import academy.learnprogramming.placefinder.PlacesDetail.PlaceDetailAdapter
 
+import academy.learnprogramming.placefinder.PlacesDetail.PlaceDetailAdapter
 import academy.learnprogramming.placefinder.R
 import android.content.pm.PackageManager
 import android.location.Location
@@ -13,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Transformations.map
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -37,31 +36,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private fun setUpMap() {
 
-        fusedLocationClient.lastLocation.addOnSuccessListener(this) {
-
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
-            }
-        }
-        map.isMyLocationEnabled = true
-
-        // 2
-        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-            // Got last known location. In some rare situations this can be null.
-            // 3
-            if (location != null) {
-                lastLocation = location
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
-            }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            return
         }
     }
 

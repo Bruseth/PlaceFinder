@@ -11,6 +11,7 @@ import android.widget.Filterable
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.name_row.view.*
+import kotlinx.android.synthetic.main.place_detail_row.view.*
 
 
 class MainAdapter(
@@ -40,11 +41,20 @@ class MainAdapter(
 
         holder.view.textView_place_name.text = feature.placeName
 
+        val placeName = feature.placeName
+        val placeLon = feature.placeLon
+        val placeLat = feature.placeLat
+
+        holder.view.button.setOnClickListener {
+            println("Hello From navigation Link")
+            mapScreen(holder.view, placeName, placeLon, placeLat)
+        }
+
         holder.placesEntity = feature
 
     }
 
-    private fun goToMap(view: View, name: String, lon: Double, lat: Double) {
+    private fun mapScreen(view: View, name: String, lon: Double, lat: Double) {
 
         val PLACE_NAME_KEY = "PLACE_NAME"
         val PLACE_LON_KEY = "PLACE_LON"
