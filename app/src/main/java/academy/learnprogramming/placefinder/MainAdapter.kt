@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Filterable
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.name_row.view.*
 import kotlinx.android.synthetic.main.place_detail_row.view.*
 
@@ -45,7 +46,12 @@ class MainAdapter(
         val placeLon = feature.placeLon
         val placeLat = feature.placeLat
 
-        holder.view.button.setOnClickListener {
+        val pointerImage = "https://pngimage.net/wp-content/uploads/2018/06/google-map-pointer-png-7.png"
+
+        val buttonPointer = holder.view.imageView_button_pointer_main
+        Picasso.get().load(pointerImage).into(buttonPointer)
+
+        holder.view.imageView_button_pointer_main.setOnClickListener {
             println("Hello From navigation Link")
             mapScreen(holder.view, placeName, placeLon, placeLat)
         }

@@ -56,7 +56,13 @@ class PlaceDetailAdapter(val fromPlaceId: FromPlaceId) :
         val placeLon = fromPlaceId.place.lon
         val placeLat = fromPlaceId.place.lat
 
-        holder.customView.button_google_map.setOnClickListener {
+        val pointerImage = "https://pngimage.net/wp-content/uploads/2018/06/google-map-pointer-png-7.png"
+
+        val buttonPointer = holder.customView.imageView_button_pointer
+        Picasso.get().load(pointerImage).into(buttonPointer)
+
+
+        holder.customView.imageView_button_pointer.setOnClickListener {
             println("Hello From navigation Link")
             mapScreen(holder.customView, placeName, placeLon, placeLat)
         }
